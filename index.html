@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { 
+                margin: 0;
+                background-color: black;
+             }
+            .control {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                padding: 5px;
+            }
+		</style>
+	</head>
+	<body>
+        <div class="control">
+            <select name="geometry" id="select" placeholder="Geometry">
+                <option value="cube">Cube</option>
+                <option value="sphere">Sphere</option>
+                <option value="cone">Cone</option>
+            </select>
+            <input type="number" name="scale" id="scale">
+            <button id="button">Create</button>
+        </div>
+		<script src="js/three.js"></script>
+		<script>
+
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+            const sphereGeometry = new THREE.SphereGeometry( 15, 32, 16 );
+            const coneGeometry = new THREE.ConeGeometry( 5, 20, 32 );
+
+			const cube = new THREE.Mesh( cubeGeometry, material );
+			const sphere = new THREE.Mesh( sphereGeometry, material );
+			const cone = new THREE.Mesh( coneGeometry, material );
+
+            const button = document.querySelector('#button');
+            const select = document.querySelector('#select');
+            const value = select.options[select.selectedIndex].value;
+
+            button.addEventListener('click', () => {
+
+                if (value === 'cube') {
+                    scene.clear();
+                    scene.add( cube );
+                }
+                else if (value === 'sphere') {
+                    scene.clear();
+                    scene.add( sphere );
+                }
+                else if (value === 'cone') {
+                    scene.clear();
+                    scene.add( cone );
+                }            
+            });
+
+
+			camera.position.z = 5;
+
+			function animate() {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
